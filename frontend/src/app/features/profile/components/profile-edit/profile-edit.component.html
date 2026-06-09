@@ -1,0 +1,39 @@
+<div class="page">
+  <div class="container" style="max-width: 520px;">
+    <div class="card" style="padding: 32px;">
+      <div class="page-header">
+        <a routerLink="/profile" class="back-link">← {{ 'common.back' | translate }}</a>
+        <h2>{{ 'profile.edit' | translate }}</h2>
+      </div>
+
+      @if (loading) {
+        <div style="text-align: center; padding: 32px;"><div class="spinner" style="margin: auto;"></div></div>
+      } @else {
+        <form [formGroup]="form" (ngSubmit)="save()">
+          <div class="row-2">
+            <div class="form-group">
+              <label class="form-label">{{ 'profile.firstName' | translate }}</label>
+              <input type="text" formControlName="firstName" class="form-control" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">{{ 'profile.lastName' | translate }}</label>
+              <input type="text" formControlName="lastName" class="form-control" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">{{ 'profile.phone' | translate }}</label>
+            <input type="tel" formControlName="phone" class="form-control" />
+          </div>
+
+          <div class="actions">
+            <a routerLink="/profile" class="btn btn-secondary">{{ 'common.cancel' | translate }}</a>
+            <button type="submit" class="btn btn-primary" [disabled]="form.invalid || saving">
+              @if (saving) { <span class="spinner"></span> } @else { {{ 'common.save' | translate }} }
+            </button>
+          </div>
+        </form>
+      }
+    </div>
+  </div>
+</div>

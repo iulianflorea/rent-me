@@ -1,0 +1,111 @@
+.kyc-card {
+  padding: 32px;
+  margin-top: 32px;
+
+  h2 { font-size: 22px; margin-bottom: 8px; }
+}
+
+.step-indicator {
+  display: flex;
+  align-items: center;
+  margin-bottom: 32px;
+}
+
+.step-dot {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-text-tertiary);
+  flex-shrink: 0;
+
+  &.active { border-color: var(--color-accent); color: var(--color-accent); }
+  &.current { background-color: var(--color-accent); color: #ffffff; border-color: var(--color-accent); }
+}
+
+.step-line {
+  flex: 1;
+  height: 2px;
+  background-color: var(--color-border);
+
+  &.active { background-color: var(--color-accent); }
+}
+
+.step-desc { margin-bottom: 20px; }
+
+.upload-zone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 40px;
+  border: 2px dashed var(--color-border);
+  border-radius: var(--radius-lg);
+  color: var(--color-text-tertiary);
+  margin-bottom: 8px;
+}
+
+.preview-img {
+  width: 100%;
+  max-height: 240px;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+  margin-bottom: 8px;
+}
+
+.row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+.upload-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.upload-btn {
+  height: 100px;
+  border: 2px dashed var(--color-border);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  overflow: hidden;
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  transition: border-color 200ms;
+
+  &:hover { border-color: var(--color-accent); }
+
+  img { width: 100%; height: 100%; object-fit: cover; }
+}
+
+.success-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 0;
+  text-align: center;
+  gap: 12px;
+
+  h2 { font-size: 20px; }
+}
+
+.check-circle {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+
+  &.success { background: rgba(52,199,89,0.12); color: var(--color-success); }
+  &.pending { background: rgba(255,159,10,0.12); }
+}

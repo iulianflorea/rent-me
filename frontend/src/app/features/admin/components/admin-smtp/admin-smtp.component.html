@@ -1,0 +1,89 @@
+<div class="page">
+  <div class="container" style="max-width: 640px;">
+    <div class="page-top">
+      <a routerLink="/admin" class="back-link">← {{ 'common.back' | translate }}</a>
+      <h2>{{ 'admin.smtpConfig.title' | translate }}</h2>
+      @if (status) {
+        <span class="badge" [class]="statusClass()">{{ statusLabel() | translate }}</span>
+      }
+    </div>
+
+    @if (currentConfig?.updatedAt) {
+      <p class="text-xs text-secondary" style="margin-bottom: 20px;">
+        Ultima modificare: {{ currentConfig?.updatedAt | date:'dd.MM.yyyy HH:mm' }}
+        @if (currentConfig?.updatedBy) { de {{ currentConfig?.updatedBy }} }
+      </p>
+    }
+
+    <div class="card smtp-card">
+      <form [formGroup]="form" (ngSubmit)="save()">
+        <div class="form-group">
+          <label class="form-label">{{ 'admin.smtpConfig.host' | translate }}</label>
+          <input type="text" formControlName="host" class="form-control" placeholder="smtp.zoho.com" />
+        </div>
+
+        <div class="row-2">
+          <div class="form-group">
+            <label class="form-label">{{ 'admin.smtpConfig.port' | translate }}</label>
+            <input type="number" formControlName="port" class="form-control" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">{{ 'admin.smtpConfig.security' | translate }}</label>
+            <select formControlName="security" class="form-control">
+              <option value="STARTTLS">STARTTLS (587)</option>
+              <option value="SSL">SSL/TLS (465)</option>
+              <option value="NONE">Fără criptare (25)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">{{ 'admin.smtpConfig.username' | translate }}</label>
+          <input type="email" formControlName="username" class="form-control" placeholder="noreply@rentit.ro" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">{{ 'admin.smtpConfig.password' | translate }}</label>
+          <div class="password-field">
+            <input
+              [type]="showPassword ? 'text' : 'password'"
+              formControlName="password"
+              class="form-control"
+              placeholder="Lasă gol pentru a păstra parola curentă"
+            />
+            <button type="button" class="show-btn btn-icon" (click)="showPassword = !showPassword">
+              @if (showPassword) {
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
+              } @else {
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+              }
+            </button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">{{ 'admin.smtpConfig.displayName' | translate }}</label>
+          <input type="text" formControlName="displayName" class="form-control" placeholder="RentIt Platform" />
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn btn-secondary" (click)="test()" [disabled]="testing">
+            @if (testing) { <span class="spinner"></span> } @else { {{ 'admin.smtpConfig.test' | translate }} }
+          </button>
+          <button type="button" class="btn btn-secondary" (click)="saveAndTest()" [disabled]="form.invalid || saving">
+            {{ 'admin.smtpConfig.saveAndTest' | translate }}
+          </button>
+          <button type="submit" class="btn btn-primary" [disabled]="form.invalid || saving">
+            @if (saving) { <span class="spinner"></span> } @else { {{ 'admin.smtpConfig.save' | translate }} }
+          </button>
+        </div>
+      </form>
+    </div>
+
+    @if (status?.errorMessage) {
+      <div class="error-box" style="margin-top: 16px;">
+        <p class="text-sm text-danger">{{ status?.errorMessage }}</p>
+      </div>
+    }
+  </div>
+</div>

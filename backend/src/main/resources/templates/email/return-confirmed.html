@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"></head>
+<body style="margin:0;padding:0;background-color:#f5f5f7;font-family:-apple-system,BlinkMacSystemFont,'Inter',sans-serif;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f5f5f7;padding:40px 20px;">
+  <tr>
+    <td align="center">
+      <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;">
+        <tr>
+          <td style="background-color:#34c759;padding:32px 40px;border-radius:16px 16px 0 0;text-align:center;">
+            <h1 style="margin:0;color:#ffffff;font-size:28px;font-weight:700;">RentIt</h1>
+            <p style="margin:12px 0 0;color:#ffffff;font-size:20px;font-weight:600;">✓ Returnare confirmată!</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="background-color:#ffffff;padding:40px;border-radius:0 0 16px 16px;">
+            <p style="margin:0 0 24px;color:#6e6e73;font-size:16px;">Bună, <span th:text="${rental.tenant.firstName}">Utilizator</span>!</p>
+            <p style="margin:0 0 24px;color:#1d1d1f;font-size:16px;line-height:1.6;">
+              Returnarea pentru <strong th:text="${rental.listing.title}">produs</strong> a fost confirmată cu succes.
+            </p>
+            <p style="margin:0 0 32px;padding:20px 24px;background-color:#f0fdf4;border-radius:12px;color:#166534;font-size:16px;line-height:1.6;">
+              💰 Garanția de <strong th:text="${rental.guaranteeAmount + ' RON'}">X RON</strong> va fi returnată pe cardul tău în <strong>3–5 zile lucrătoare</strong>.
+            </p>
+            <p style="margin:0 0 32px;color:#1d1d1f;font-size:16px;line-height:1.6;">
+              Mulțumim că ai folosit RentIt! Lasă o recenzie pentru a ajuta alți utilizatori.
+            </p>
+            <hr style="border:none;border-top:1px solid #e8e8ed;margin:32px 0;">
+            <p style="margin:0;color:#6e6e73;font-size:12px;text-align:center;">RentIt SRL · <a href="mailto:support@rentit.ro" style="color:#4f46e5;">support@rentit.ro</a></p>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<div class="page">
+  <div class="container" style="max-width: 720px;">
+    @if (loading) {
+      <div class="card profile-card">
+        <div class="profile-header">
+          <app-skeleton width="88px" height="88px" radius="50%" />
+          <div style="flex: 1; display: flex; flex-direction: column; gap: 8px;">
+            <app-skeleton height="24px" width="180px" />
+            <app-skeleton height="16px" width="120px" />
+          </div>
+        </div>
+      </div>
+    } @else if (profile) {
+      <div class="card profile-card">
+        <div class="profile-header">
+          <div class="avatar-lg">{{ profile.firstName.charAt(0) }}{{ profile.lastName.charAt(0) }}</div>
+          <div class="profile-info">
+            <div class="name-row">
+              <h2>{{ profile.firstName }} {{ profile.lastName }}</h2>
+              <app-verification-badge [status]="$any(profile.kycStatus)" />
+            </div>
+            <p class="text-secondary text-sm">{{ profile.email }}</p>
+            <p class="text-secondary text-sm">{{ 'profile.memberSince' | translate }}: {{ profile.createdAt | date:'MMM yyyy' }}</p>
+            @if (profile.averageRating > 0) {
+              <app-star-rating [rating]="profile.averageRating" [count]="profile.reviewCount" />
+            }
+          </div>
+          @if (isOwnProfile) {
+            <a routerLink="/profile/edit" class="btn btn-secondary btn-sm">{{ 'profile.edit' | translate }}</a>
+          }
+        </div>
+
+        <div class="stats-row">
+          <div class="stat">
+            <strong>{{ profile.activeListingsCount }}</strong>
+            <span>{{ 'dashboard.myListings' | translate }}</span>
+          </div>
+          <div class="stat">
+            <strong>{{ profile.totalRentalsCount }}</strong>
+            <span>{{ 'dashboard.myRentals' | translate }}</span>
+          </div>
+          <div class="stat">
+            <strong>{{ profile.reviewCount }}</strong>
+            <span>{{ 'profile.reviews' | translate }}</span>
+          </div>
+        </div>
+
+        @if (isOwnProfile && profile.kycStatus !== 'VERIFIED') {
+          <div class="kyc-cta">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+            <div>
+              <strong>{{ 'kyc.title' | translate }}</strong>
+              <p class="text-sm text-secondary">{{ 'kyc.subtitle' | translate }}</p>
+            </div>
+            <a routerLink="/profile/kyc" class="btn btn-primary btn-sm">{{ 'common.next' | translate }}</a>
+          </div>
+        }
+      </div>
+    }
+  </div>
+</div>

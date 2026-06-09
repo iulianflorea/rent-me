@@ -1,0 +1,35 @@
+<a [routerLink]="['/listings', listing.id]" class="card listing-card">
+  <div class="card-image">
+    <img
+      [src]="listing.firstImageUrl || 'assets/placeholder.png'"
+      [alt]="listing.title"
+      loading="lazy"
+    />
+    <span class="category-badge">{{ 'listing.categories.' + listing.category | translate }}</span>
+  </div>
+  <div class="card-body">
+    <h3 class="card-title">{{ listing.title }}</h3>
+    <div class="card-location">
+      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+      <span>{{ listing.city }}{{ listing.distanceKm !== null ? ' · ' + (listing.distanceKm | number:'1.0-0') + ' km' : '' }}</span>
+    </div>
+    <div class="card-footer">
+      <div class="card-owner">
+        <div class="owner-avatar">{{ listing.owner.firstName.charAt(0) }}{{ listing.owner.lastName.charAt(0) }}</div>
+        <div>
+          <span class="owner-name">{{ listing.owner.firstName }}</span>
+          @if (listing.owner.kycStatus === 'VERIFIED') {
+            <app-verification-badge status="VERIFIED" size="dot" />
+          }
+        </div>
+      </div>
+      <div class="card-price">
+        <strong>{{ listing.pricePerDay | number:'1.0-0' }} RON</strong>
+        <span class="text-secondary">{{ 'listing.perDay' | translate }}</span>
+      </div>
+    </div>
+    @if (listing.owner.reviewCount > 0) {
+      <app-star-rating [rating]="listing.owner.averageRating" [count]="listing.owner.reviewCount" [size]="12" />
+    }
+  </div>
+</a>

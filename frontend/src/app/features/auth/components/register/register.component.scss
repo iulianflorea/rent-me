@@ -1,0 +1,9 @@
+.row-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.terms { margin-bottom: 16px; }
+.w-full { width: 100%; }
+.auth-footer { margin-top: 24px; a { font-weight: 600; } }

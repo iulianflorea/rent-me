@@ -1,0 +1,105 @@
+<div class="page">
+  <div class="container" style="max-width: 560px;">
+    <div class="card kyc-card">
+      <div class="step-indicator">
+        @for (s of [1,2,3]; track s) {
+          <div class="step-dot" [class.active]="step >= s" [class.current]="step === s">{{ s }}</div>
+          @if (s < 3) { <div class="step-line" [class.active]="step > s"></div> }
+        }
+      </div>
+
+      @if (step === 1) {
+        <h2>{{ 'kyc.step1.title' | translate }}</h2>
+        <p class="text-secondary step-desc">{{ 'kyc.step1.description' | translate }}</p>
+
+        @if (selfiePreview) {
+          <img [src]="selfiePreview" alt="Selfie" class="preview-img" />
+        } @else {
+          <div class="upload-zone">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+            <p>{{ 'kyc.step1.capture' | translate }}</p>
+          </div>
+        }
+
+        <label class="btn btn-primary" style="width: 100%; cursor: pointer; margin-top: 16px;">
+          {{ selfiePreview ? ('kyc.step1.retake' | translate) : ('kyc.step1.capture' | translate) }}
+          <input type="file" accept="image/*" capture="user" style="display:none;" (change)="captureSelfie($event)" />
+        </label>
+
+        <button class="btn btn-secondary" style="width: 100%; margin-top: 8px;" (click)="goToStep2()" [disabled]="!selfiePreview || uploading">
+          {{ 'common.next' | translate }}
+        </button>
+      }
+
+      @if (step === 2) {
+        <h2>{{ 'kyc.step2.title' | translate }}</h2>
+
+        <form [formGroup]="dataForm" (ngSubmit)="submitData()">
+          <div class="row-2">
+            <div class="form-group">
+              <label class="form-label">{{ 'kyc.step2.idSeries' | translate }}</label>
+              <input type="text" formControlName="idSeries" class="form-control" placeholder="AB" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">{{ 'kyc.step2.idNumber' | translate }}</label>
+              <input type="text" formControlName="idNumber" class="form-control" placeholder="123456" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">{{ 'kyc.step2.cnp' | translate }}</label>
+            <input type="text" formControlName="cnp" class="form-control" maxlength="13" />
+          </div>
+
+          <div class="row-2">
+            <div class="form-group">
+              <label class="form-label">{{ 'kyc.step2.birthDate' | translate }}</label>
+              <input type="date" formControlName="birthDate" class="form-control" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">{{ 'kyc.step2.expiryDate' | translate }}</label>
+              <input type="date" formControlName="idExpiryDate" class="form-control" />
+            </div>
+          </div>
+
+          <div class="upload-grid">
+            <label class="upload-btn">
+              @if (idFrontPreview) {
+                <img [src]="idFrontPreview" alt="CI față" />
+              } @else {
+                <span>{{ 'kyc.step2.frontPhoto' | translate }}</span>
+              }
+              <input type="file" accept="image/*" style="display:none;" (change)="uploadIdFront($event)" />
+            </label>
+            <label class="upload-btn">
+              @if (idBackPreview) {
+                <img [src]="idBackPreview" alt="CI spate" />
+              } @else {
+                <span>{{ 'kyc.step2.backPhoto' | translate }}</span>
+              }
+              <input type="file" accept="image/*" style="display:none;" (change)="uploadIdBack($event)" />
+            </label>
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 8px;" [disabled]="dataForm.invalid || loading">
+            @if (loading) { <span class="spinner"></span> } @else { {{ 'kyc.submit' | translate }} }
+          </button>
+        </form>
+      }
+
+      @if (step === 3) {
+        <div class="success-state">
+          @if (auth.currentUser?.kycStatus === 'VERIFIED') {
+            <div class="check-circle success">✓</div>
+            <h2>{{ 'kyc.badge.verified' | translate }}</h2>
+          } @else {
+            <div class="check-circle pending">⏳</div>
+            <h2>{{ 'kyc.step3.title' | translate }}</h2>
+            <p class="text-secondary">{{ 'kyc.step3.pending' | translate }}</p>
+          }
+          <a routerLink="/profile" class="btn btn-secondary" style="margin-top: 16px;">{{ 'common.back' | translate }}</a>
+        </div>
+      }
+    </div>
+  </div>
+</div>

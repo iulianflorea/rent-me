@@ -1,0 +1,73 @@
+<div class="page">
+  <div class="container checkout-container">
+    <a [routerLink]="['/listings', listing?.id]" class="back-link">
+      ← {{ 'common.back' | translate }}
+    </a>
+
+    <h2>{{ 'rental.checkout.title' | translate }}</h2>
+
+    @if (listing) {
+      <div class="checkout-layout">
+        <div class="checkout-main">
+          @if (!stripeReady) {
+            <div class="card summary-card">
+              <div class="listing-summary">
+                <img [src]="listing.firstImageUrl || 'assets/placeholder.png'" [alt]="listing.title" class="listing-thumb" />
+                <div>
+                  <h3>{{ listing.title }}</h3>
+                  <p class="text-secondary text-sm">{{ listing.city }}, {{ listing.county }}</p>
+                </div>
+              </div>
+
+              <div class="price-table">
+                <div class="price-row">
+                  <span>{{ days }} {{ 'common.days' | translate }} × {{ listing.pricePerDay }} RON</span>
+                  <span>{{ rentalSubtotal | number:'1.0-0' }} RON</span>
+                </div>
+                @if (guarantee > 0) {
+                  <div class="price-row">
+                    <span>{{ 'rental.checkout.guarantee' | translate }} (50%)</span>
+                    <span>{{ guarantee | number:'1.0-0' }} RON</span>
+                  </div>
+                }
+                <div class="price-row total">
+                  <strong>{{ 'rental.checkout.total' | translate }}</strong>
+                  <strong>{{ total | number:'1.0-0' }} RON</strong>
+                </div>
+              </div>
+
+              <div class="period">
+                <div>
+                  <span class="form-label">{{ 'rental.checkout.startDate' | translate }}</span>
+                  <strong>{{ startDate }}</strong>
+                </div>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                <div>
+                  <span class="form-label">{{ 'rental.checkout.endDate' | translate }}</span>
+                  <strong>{{ endDate }}</strong>
+                </div>
+              </div>
+
+              <button class="btn btn-primary" style="width: 100%;" (click)="createRentalAndPay()" [disabled]="paying">
+                @if (paying) { <span class="spinner"></span> } @else { {{ 'rental.checkout.pay' | translate }} }
+              </button>
+            </div>
+          } @else {
+            <div class="card" style="padding: 24px;">
+              <h3 style="margin-bottom: 20px;">{{ 'rental.checkout.pay' | translate }}</h3>
+              <div id="stripe-payment-element"></div>
+              <button class="btn btn-primary" style="width: 100%; margin-top: 20px;" (click)="confirmPayment()" [disabled]="paying">
+                @if (paying) { <span class="spinner"></span> } @else { Confirmă plata · {{ total | number:'1.0-0' }} RON }
+              </button>
+            </div>
+          }
+        </div>
+
+        <div class="checkout-side card" style="padding: 24px;">
+          <h4>{{ 'listing.detail.guarantee' | translate }}</h4>
+          <p class="text-secondary text-sm" style="margin-top: 8px;">{{ 'rental.checkout.guaranteeNote' | translate:{ amount: guarantee } }}</p>
+        </div>
+      </div>
+    }
+  </div>
+</div>

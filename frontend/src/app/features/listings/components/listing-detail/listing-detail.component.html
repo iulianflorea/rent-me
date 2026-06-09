@@ -1,0 +1,198 @@
+@if (loading) {
+  <div class="page">
+    <div class="container">
+      <div class="detail-layout">
+        <div>
+          <app-skeleton height="420px" radius="var(--radius-lg)" />
+          <div style="margin-top: 24px; display: flex; flex-direction: column; gap: 12px;">
+            <app-skeleton height="32px" width="70%" />
+            <app-skeleton height="20px" width="40%" />
+            <app-skeleton height="80px" />
+          </div>
+        </div>
+        <div>
+          <app-skeleton height="320px" radius="var(--radius-lg)" />
+        </div>
+      </div>
+    </div>
+  </div>
+} @else if (listing) {
+  <div class="page">
+    <div class="container">
+      <a routerLink="/" class="back-link">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        {{ 'common.back' | translate }}
+      </a>
+
+      <div class="detail-layout">
+        <div class="detail-left">
+          <div class="images-gallery">
+            <div class="main-image">
+              <img [src]="listing.images[selectedImage]?.url || listing.firstImageUrl || 'assets/placeholder.png'" [alt]="listing.title" />
+            </div>
+            @if (listing.images.length > 1) {
+              <div class="thumbnails">
+                @for (img of listing.images; track img.id) {
+                  <button class="thumb" [class.active]="$index === selectedImage" (click)="selectedImage = $index">
+                    <img [src]="img.url" [alt]="listing.title" />
+                  </button>
+                }
+              </div>
+            }
+          </div>
+
+          <div class="detail-info card" style="padding: 24px; margin-top: 24px;">
+            <h1>{{ listing.title }}</h1>
+            <div class="info-row">
+              <span class="badge badge-info">{{ 'listing.categories.' + listing.category | translate }}</span>
+              <span class="text-secondary text-sm">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                {{ listing.address || listing.city }}, {{ listing.county }}
+              </span>
+            </div>
+
+            <p class="description">{{ listing.description }}</p>
+
+            @if (hasSpecs) {
+              <div class="specs-section">
+                <h3>{{ 'listing.detail.specifications' | translate }}</h3>
+
+                @if (specRows.length > 0) {
+                  <dl class="spec-grid">
+                    @for (row of specRows; track row.key) {
+                      <div class="spec-item">
+                        <dt>{{ row.key | translate }}</dt>
+                        <dd>{{ row.value }}</dd>
+                      </div>
+                    }
+                  </dl>
+                }
+
+                @if (functiiPrincipale.length > 0) {
+                  <div class="spec-tags-row">
+                    <span class="spec-tags-label">{{ 'listing.fields.functiiPrincipale' | translate }}</span>
+                    <div class="spec-tags">
+                      @for (f of functiiPrincipale; track f) {
+                        <span class="spec-tag">{{ f }}</span>
+                      }
+                    </div>
+                  </div>
+                }
+
+                @if (dotariList.length > 0) {
+                  <div class="spec-tags-row">
+                    <span class="spec-tags-label">{{ 'listing.fields.dotari' | translate }}</span>
+                    <div class="spec-tags">
+                      @for (d of dotariList; track d) {
+                        <span class="spec-tag">{{ d }}</span>
+                      }
+                    </div>
+                  </div>
+                }
+
+                @if (facilitatiList.length > 0) {
+                  <div class="spec-tags-row">
+                    <span class="spec-tags-label">{{ 'listing.fields.facilitati' | translate }}</span>
+                    <div class="spec-tags">
+                      @for (f of facilitatiList; track f) {
+                        <span class="spec-tag">{{ f }}</span>
+                      }
+                    </div>
+                  </div>
+                }
+              </div>
+            }
+
+            <div class="owner-section">
+              <h3>{{ 'listing.detail.owner' | translate }}</h3>
+              <a [routerLink]="['/users', listing.owner.id]" class="owner-card">
+                <div class="owner-avatar-lg">{{ listing.owner.firstName.charAt(0) }}{{ listing.owner.lastName.charAt(0) }}</div>
+                <div>
+                  <strong>{{ listing.owner.firstName }} {{ listing.owner.lastName }}</strong>
+                  <app-verification-badge [status]="$any(listing.owner.kycStatus)" />
+                </div>
+                <app-star-rating [rating]="listing.owner.averageRating" [count]="listing.owner.reviewCount" style="margin-left: auto;" />
+              </a>
+            </div>
+          </div>
+
+          @if (reviews.length > 0) {
+            <div class="card" style="padding: 24px; margin-top: 24px;">
+              <h3>{{ 'listing.detail.reviews' | translate }}</h3>
+              @for (review of reviews; track review.id) {
+                <div class="review-item">
+                  <div class="review-header">
+                    <span class="font-medium">{{ review.reviewer.firstName }} {{ review.reviewer.lastName }}</span>
+                    <app-star-rating [rating]="review.rating" [showCount]="false" />
+                  </div>
+                  <p class="text-secondary text-sm">{{ review.comment }}</p>
+                </div>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="detail-right">
+          <div class="booking-card card">
+            <div class="price-display">
+              <span class="price">{{ listing.pricePerDay | number:'1.0-0' }} RON</span>
+              <span class="text-secondary">{{ 'listing.perDay' | translate }}</span>
+            </div>
+
+            <form [formGroup]="dateForm">
+              <div class="date-grid">
+                <div class="form-group">
+                  <label class="form-label">{{ 'rental.checkout.startDate' | translate }}</label>
+                  <input type="date" class="form-control" formControlName="startDate" [min]="today" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label">{{ 'rental.checkout.endDate' | translate }}</label>
+                  <input type="date" class="form-control" formControlName="endDate" [min]="dateForm.value.startDate || today" />
+                </div>
+              </div>
+            </form>
+
+            @if (days > 0) {
+              <div class="price-breakdown">
+                <div class="price-row">
+                  <span>{{ days }} {{ 'common.days' | translate }} × {{ listing.pricePerDay }} RON</span>
+                  <span>{{ totalPrice | number:'1.0-0' }} RON</span>
+                </div>
+                @if (guaranteeAmount > 0) {
+                  <div class="price-row">
+                    <span>{{ 'rental.checkout.guarantee' | translate }}</span>
+                    <span>{{ guaranteeAmount | number:'1.0-0' }} RON</span>
+                  </div>
+                }
+                <div class="price-row total">
+                  <strong>{{ 'rental.checkout.total' | translate }}</strong>
+                  <strong>{{ (totalPrice + guaranteeAmount) | number:'1.0-0' }} RON</strong>
+                </div>
+              </div>
+            }
+
+            <button class="btn btn-primary" style="width: 100%;" (click)="checkout()" [disabled]="days < 1">
+              {{ 'listing.detail.rentNow' | translate }}
+            </button>
+
+            @if (auth.isLoggedIn) {
+              <button class="btn btn-secondary" style="width: 100%; margin-top: 8px;" (click)="toggleWishlist()">
+                @if (inWishlist) {
+                  ♥ {{ 'listing.detail.removeFromWishlist' | translate }}
+                } @else {
+                  ♡ {{ 'listing.detail.addToWishlist' | translate }}
+                }
+              </button>
+            }
+
+            @if (guaranteeAmount > 0) {
+              <p class="guarantee-note text-sm text-secondary text-center">
+                {{ 'listing.guarantee' | translate:{ amount: guaranteeAmount } }}
+              </p>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+}

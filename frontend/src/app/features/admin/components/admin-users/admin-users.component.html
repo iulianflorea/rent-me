@@ -1,0 +1,69 @@
+<div class="page">
+  <div class="container">
+    <div class="page-top">
+      <h2>{{ 'admin.users' | translate }}</h2>
+      <span class="text-secondary text-sm">{{ totalElements }} utilizatori</span>
+    </div>
+
+    <div class="search-row">
+      <input type="search" class="form-control" placeholder="Caută după email sau nume..." [formControl]="searchControl" style="max-width: 360px;" />
+    </div>
+
+    @if (loading) {
+      <div style="text-align: center; padding: 48px;"><div class="spinner" style="margin: auto;"></div></div>
+    } @else {
+      <div class="table-wrap card">
+        <table class="users-table">
+          <thead>
+            <tr>
+              <th>Utilizator</th>
+              <th>Email</th>
+              <th>KYC</th>
+              <th>Activ</th>
+              <th>Înregistrat</th>
+              <th>Acțiuni</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (user of users; track user.id) {
+              <tr>
+                <td>{{ user.firstName }} {{ user.lastName }}</td>
+                <td class="text-secondary text-sm">{{ user.email }}</td>
+                <td><app-verification-badge [status]="$any(user.kycStatus)" /></td>
+                <td>
+                  <span class="badge" [class]="user.active ? 'badge-success' : 'badge-danger'">
+                    {{ user.active ? 'Activ' : 'Suspendat' }}
+                  </span>
+                </td>
+                <td class="text-secondary text-sm">{{ user.createdAt | date:'dd.MM.yyyy' }}</td>
+                <td>
+                  <div class="action-btns">
+                    @if (user.kycStatus === 'PENDING') {
+                      <button class="btn btn-sm" style="background: rgba(52,199,89,0.15); color: var(--color-success);" (click)="approveKyc(user)">
+                        {{ 'admin.approveKyc' | translate }}
+                      </button>
+                      <button class="btn btn-sm" style="background: rgba(255,59,48,0.1); color: var(--color-danger);" (click)="rejectKyc(user)">
+                        {{ 'admin.rejectKyc' | translate }}
+                      </button>
+                    }
+                    <button class="btn btn-secondary btn-sm" (click)="toggleSuspend(user)">
+                      {{ user.active ? ('admin.suspendUser' | translate) : ('admin.activateUser' | translate) }}
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      @if (totalPages > 1) {
+        <div class="pagination">
+          <button class="btn btn-secondary btn-sm" (click)="page = page - 1; loadUsers()" [disabled]="page === 0">← Anterior</button>
+          <span class="text-secondary text-sm">{{ page + 1 }} / {{ totalPages }}</span>
+          <button class="btn btn-secondary btn-sm" (click)="page = page + 1; loadUsers()" [disabled]="page >= totalPages - 1">Următor →</button>
+        </div>
+      }
+    }
+  </div>
+</div>

@@ -1,0 +1,14 @@
+.page-header {
+  margin-bottom: 24px;
+  .back-link { color: var(--color-text-secondary); font-size: 14px; text-decoration: none; display: block; margin-bottom: 12px; }
+  h2 { font-size: 22px; }
+}
+
+.row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+.actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  margin-top: 8px;
+}

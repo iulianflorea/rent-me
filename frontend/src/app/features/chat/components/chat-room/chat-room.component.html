@@ -1,0 +1,45 @@
+<div class="chat-layout">
+  <div class="chat-header card">
+    <a routerLink="/chat" class="back-btn btn btn-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+    </a>
+    @if (room) {
+      <div class="header-avatar">{{ room.otherUser.firstName.charAt(0) }}{{ room.otherUser.lastName.charAt(0) }}</div>
+      <div>
+        <strong>{{ room.otherUser.firstName }} {{ room.otherUser.lastName }}</strong>
+        @if (room.rental) {
+          <p class="text-xs text-secondary">{{ room.rental.listing.title }}</p>
+        }
+      </div>
+    }
+  </div>
+
+  <div class="messages-area">
+    @for (msg of messages; track msg.id) {
+      <div class="message-wrap" [class.own]="isOwnMessage(msg)">
+        <div class="bubble" [class.own-bubble]="isOwnMessage(msg)">
+          @if (msg.messageType === 'IMAGE' && msg.fileUrl) {
+            <img [src]="msg.fileUrl" alt="Imagine" class="msg-image" />
+          } @else {
+            {{ msg.content }}
+          }
+        </div>
+        <span class="msg-time">{{ msg.createdAt | timeAgo }}</span>
+      </div>
+    }
+    <div #messagesEnd></div>
+  </div>
+
+  <div class="chat-input card">
+    <textarea
+      class="input-field"
+      [placeholder]="'chat.typeMessage' | translate"
+      [formControl]="messageControl"
+      (keydown)="sendOnEnter($event)"
+      rows="1"
+    ></textarea>
+    <button class="send-btn btn btn-primary btn-sm" (click)="send()" [disabled]="!messageControl.value?.trim()">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+    </button>
+  </div>
+</div>

@@ -1,0 +1,90 @@
+<nav class="navbar">
+  <div class="container navbar-inner">
+    <a routerLink="/" class="navbar-brand">
+      <span class="brand-logo">Rent It</span>
+    </a>
+
+    <div class="navbar-actions hide-mobile">
+      <div class="lang-toggle">
+        <button
+          class="lang-btn"
+          [class.active]="(lang.current$() | async) === 'ro'"
+          (click)="setLang('ro')"
+        >
+          RO
+        </button>
+        <button
+          class="lang-btn"
+          [class.active]="(lang.current$() | async) === 'en'"
+          (click)="setLang('en')"
+        >
+          EN
+        </button>
+      </div>
+
+      <button class="btn btn-icon theme-btn" (click)="theme.toggle()" [title]="'nav.theme' | translate">
+        @if (theme.isDark$() | async) {
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        } @else {
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+        }
+      </button>
+
+      @if (auth.isLoggedIn) {
+        <a routerLink="/listings/create" class="btn btn-primary btn-sm">
+          + {{ 'nav.post' | translate }}
+        </a>
+        <a routerLink="/chat" class="btn btn-icon" routerLinkActive="active">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+        </a>
+        <div class="user-menu">
+          <button class="user-avatar" (click)="toggleMenu()" [attr.aria-expanded]="menuOpen">
+            {{ auth.currentUser?.firstName?.charAt(0) }}{{ auth.currentUser?.lastName?.charAt(0) }}
+          </button>
+          @if (menuOpen) {
+            <div class="dropdown">
+              <a routerLink="/profile" (click)="closeMenu()">{{ 'nav.profile' | translate }}</a>
+              <a routerLink="/dashboard" (click)="closeMenu()">{{ 'nav.dashboard' | translate }}</a>
+              @if (auth.isAdmin) {
+                <a routerLink="/admin" (click)="closeMenu()">{{ 'nav.admin' | translate }}</a>
+              }
+              <a routerLink="/dashboard/wishlist" (click)="closeMenu()">{{ 'nav.wishlist' | translate }}</a>
+              <hr>
+              <button (click)="logout()">{{ 'nav.logout' | translate }}</button>
+            </div>
+          }
+        </div>
+      } @else {
+        <a routerLink="/auth/login" class="btn btn-secondary btn-sm">{{ 'nav.login' | translate }}</a>
+        <a routerLink="/auth/register" class="btn btn-primary btn-sm">{{ 'nav.register' | translate }}</a>
+      }
+    </div>
+
+    <!-- Mobile bottom nav -->
+    <div class="bottom-nav hide-desktop">
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="bottom-nav-item">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+        <span>{{ 'nav.home' | translate }}</span>
+      </a>
+      @if (auth.isLoggedIn) {
+        <a routerLink="/listings/create" class="bottom-nav-item">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+          <span>{{ 'nav.post' | translate }}</span>
+        </a>
+        <a routerLink="/chat" routerLinkActive="active" class="bottom-nav-item">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+          <span>{{ 'nav.chat' | translate }}</span>
+        </a>
+        <a routerLink="/dashboard" routerLinkActive="active" class="bottom-nav-item">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+          <span>{{ 'nav.dashboard' | translate }}</span>
+        </a>
+      } @else {
+        <a routerLink="/auth/login" routerLinkActive="active" class="bottom-nav-item">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path><polyline points="10 17 15 12 10 7"></polyline><line x1="15" y1="12" x2="3" y2="12"></line></svg>
+          <span>{{ 'nav.login' | translate }}</span>
+        </a>
+      }
+    </div>
+  </div>
+</nav>

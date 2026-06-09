@@ -1,0 +1,54 @@
+<div class="page">
+  <div class="container">
+    <div class="dashboard-header">
+      <h1>{{ 'dashboard.title' | translate }}, {{ auth.currentUser?.firstName }}!</h1>
+    </div>
+
+    <div class="tab-bar" style="max-width: 600px;">
+      <a routerLink="/dashboard" class="tab-item active">{{ 'dashboard.overview' | translate }}</a>
+      <a routerLink="/dashboard/listings" class="tab-item">{{ 'dashboard.myListings' | translate }}</a>
+      <a routerLink="/dashboard/rentals" class="tab-item">{{ 'dashboard.myRentals' | translate }}</a>
+      <a routerLink="/dashboard/earnings" class="tab-item">{{ 'dashboard.myEarnings' | translate }}</a>
+    </div>
+
+    @if (loading) {
+      <div class="stats-grid">
+        @for (s of [1,2,3,4]; track s) {
+          <div class="card stat-card">
+            <app-skeleton height="14px" width="60%" />
+            <app-skeleton height="32px" width="40%" style="margin-top: 8px;" />
+          </div>
+        }
+      </div>
+    } @else if (overview) {
+      <div class="stats-grid">
+        <div class="card stat-card">
+          <span class="stat-label">{{ 'dashboard.stats.activeListings' | translate }}</span>
+          <strong class="stat-value">{{ overview.activeListings }}</strong>
+          <a routerLink="/dashboard/listings" class="stat-link">{{ 'common.view' | translate }} →</a>
+        </div>
+        <div class="card stat-card">
+          <span class="stat-label">{{ 'dashboard.stats.totalEarnings' | translate }}</span>
+          <strong class="stat-value accent">{{ overview.totalEarnings | number:'1.0-0' }} RON</strong>
+          <a routerLink="/dashboard/earnings" class="stat-link">{{ 'common.view' | translate }} →</a>
+        </div>
+        <div class="card stat-card">
+          <span class="stat-label">{{ 'dashboard.stats.pendingRentals' | translate }}</span>
+          <strong class="stat-value">{{ overview.pendingRentals }}</strong>
+          <a routerLink="/dashboard/rentals" class="stat-link">{{ 'common.view' | translate }} →</a>
+        </div>
+        <div class="card stat-card">
+          <span class="stat-label">{{ 'dashboard.stats.totalRentals' | translate }}</span>
+          <strong class="stat-value">{{ overview.totalRentalsAsTenant }}</strong>
+          <a routerLink="/dashboard/rentals" class="stat-link">{{ 'common.view' | translate }} →</a>
+        </div>
+      </div>
+    }
+
+    <div class="quick-actions">
+      <a routerLink="/listings/create" class="btn btn-primary">+ {{ 'nav.post' | translate }}</a>
+      <a routerLink="/profile/kyc" class="btn btn-secondary">{{ 'kyc.title' | translate }}</a>
+      <a routerLink="/dashboard/wishlist" class="btn btn-secondary">{{ 'nav.wishlist' | translate }}</a>
+    </div>
+  </div>
+</div>

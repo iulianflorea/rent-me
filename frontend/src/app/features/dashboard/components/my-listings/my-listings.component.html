@@ -1,0 +1,45 @@
+<div class="page">
+  <div class="container">
+    <div class="page-top">
+      <h2>{{ 'dashboard.myListings' | translate }}</h2>
+      <a routerLink="/listings/create" class="btn btn-primary btn-sm">+ {{ 'nav.post' | translate }}</a>
+    </div>
+
+    @if (loading) {
+      @for (s of [1,2,3]; track s) {
+        <div class="card listing-row">
+          <app-skeleton width="80px" height="60px" />
+          <div style="flex: 1; display: flex; flex-direction: column; gap: 8px;">
+            <app-skeleton height="18px" width="50%" />
+            <app-skeleton height="14px" width="30%" />
+          </div>
+        </div>
+      }
+    } @else if (listings.length === 0) {
+      <div class="empty-state">
+        <div class="empty-icon">📋</div>
+        <h3>Nu ai niciun anunț</h3>
+        <p>Postează primul tău anunț și începe să câștigi bani.</p>
+        <a routerLink="/listings/create" class="btn btn-primary" style="margin-top: 16px;">+ Postează anunț</a>
+      </div>
+    } @else {
+      @for (listing of listings; track listing.id) {
+        <div class="card listing-row">
+          <img [src]="listing.firstImageUrl || 'assets/placeholder.png'" [alt]="listing.title" class="listing-thumb" />
+          <div class="listing-info">
+            <h3>{{ listing.title }}</h3>
+            <p class="text-secondary text-sm">{{ listing.city }} · {{ listing.pricePerDay }} RON/zi</p>
+          </div>
+          <span class="badge" [class]="statusBadgeClass(listing.status)">
+            {{ 'listing.status.' + listing.status | translate }}
+          </span>
+          <div class="listing-actions">
+            <a [routerLink]="['/listings', listing.id]" class="btn btn-secondary btn-sm">{{ 'common.view' | translate }}</a>
+            <a [routerLink]="['/listings', listing.id, 'edit']" class="btn btn-secondary btn-sm">{{ 'common.edit' | translate }}</a>
+            <button class="btn btn-danger btn-sm" (click)="deleteListing(listing.id)">{{ 'common.delete' | translate }}</button>
+          </div>
+        </div>
+      }
+    }
+  </div>
+</div>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"></head>
+<body style="margin:0;padding:0;background-color:#f5f5f7;font-family:-apple-system,BlinkMacSystemFont,'Inter',sans-serif;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f5f5f7;padding:40px 20px;">
+  <tr>
+    <td align="center">
+      <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;">
+        <tr>
+          <td style="background-color:#4f46e5;padding:32px 40px;border-radius:16px 16px 0 0;text-align:center;">
+            <h1 style="margin:0;color:#ffffff;font-size:28px;font-weight:700;">RentIt</h1>
+          </td>
+        </tr>
+        <tr>
+          <td style="background-color:#ffffff;padding:40px;border-radius:0 0 16px 16px;">
+            <h2 style="margin:0 0 16px;color:#1d1d1f;font-size:24px;font-weight:600;">Acord GDPR semnat</h2>
+            <p style="margin:0 0 24px;color:#6e6e73;font-size:16px;line-height:1.6;">Bună, <span th:text="${user.firstName}">Utilizator</span>,</p>
+            <p style="margin:0 0 24px;color:#1d1d1f;font-size:16px;line-height:1.6;">Acordul tău de prelucrare a datelor personale a fost semnat electronic cu succes.</p>
+
+            <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f5f5f7;border-radius:12px;padding:24px;margin:0 0 32px;">
+              <tr>
+                <td>
+                  <p style="margin:0 0 8px;color:#6e6e73;font-size:14px;font-weight:500;">DETALII SEMNARE</p>
+                  <p style="margin:0 0 4px;color:#1d1d1f;font-size:15px;">Email: <strong th:text="${user.email}">email@example.com</strong></p>
+                  <p style="margin:0 0 4px;color:#1d1d1f;font-size:15px;">Versiune acord: <strong>1.0</strong></p>
+                  <p style="margin:0;color:#1d1d1f;font-size:15px;">Temeiul legal: <strong>Art. 6(1)(a) GDPR</strong></p>
+                </td>
+              </tr>
+            </table>
+
+            <h3 style="margin:0 0 16px;color:#1d1d1f;font-size:18px;font-weight:600;">Drepturile tale</h3>
+            <ul style="margin:0 0 32px;padding-left:24px;color:#1d1d1f;font-size:15px;line-height:1.8;">
+              <li>Dreptul de acces la datele personale</li>
+              <li>Dreptul la rectificarea datelor inexacte</li>
+              <li>Dreptul la ștergerea datelor</li>
+              <li>Dreptul la portabilitatea datelor</li>
+              <li>Dreptul de a te opune prelucrării</li>
+            </ul>
+            <p style="margin:0 0 32px;color:#6e6e73;font-size:14px;line-height:1.6;">Pentru exercitarea drepturilor: <a href="mailto:dpo@rentit.ro" style="color:#4f46e5;">dpo@rentit.ro</a></p>
+
+            <p style="margin:0 0 8px;color:#6e6e73;font-size:12px;text-align:center;">În atașament găsești acordul GDPR complet.</p>
+
+            <hr style="border:none;border-top:1px solid #e8e8ed;margin:32px 0;">
+            <p style="margin:0;color:#6e6e73;font-size:12px;line-height:1.6;text-align:center;">
+              RentIt SRL · București, România · <a href="mailto:dpo@rentit.ro" style="color:#4f46e5;">dpo@rentit.ro</a>
+            </p>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+</body>
+</html>

@@ -1,0 +1,126 @@
+<div class="page">
+  <div class="container">
+    <div class="hero">
+      <h1>{{ 'nav.home' | translate }}</h1>
+      <div class="search-bar">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <input
+          type="search"
+          [placeholder]="'listing.filters.searchPlaceholder' | translate"
+          [formControl]="$any(filterForm.get('search'))"
+          class="search-input"
+        />
+      </div>
+    </div>
+
+    <div class="layout">
+      <aside class="filters card">
+        <h3 class="filters-title">{{ 'listing.filters.title' | translate }}</h3>
+
+        <div class="filter-section">
+          <p class="filter-section-label">{{ 'listing.filters.location' | translate }}</p>
+          <div class="form-group">
+            <div class="location-input-wrap">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+              <input
+                type="text"
+                class="form-control location-input"
+                [placeholder]="'listing.filters.cityPlaceholder' | translate"
+                [formControl]="$any(filterForm.get('city'))"
+              />
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="location-input-wrap">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="3 11 22 2 13 21 11 13 3 11"></polygon></svg>
+              <input
+                type="text"
+                class="form-control location-input"
+                [placeholder]="'listing.filters.countyPlaceholder' | translate"
+                [formControl]="$any(filterForm.get('county'))"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="filter-section">
+          <p class="filter-section-label">{{ 'listing.filters.category' | translate }}</p>
+          <select class="form-control" [formControl]="$any(filterForm.get('category'))">
+            <option value="">{{ 'common.all' | translate }}</option>
+            @for (cat of categories; track cat) {
+              <option [value]="cat">{{ 'listing.categories.' + cat | translate }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="filter-section">
+          <p class="filter-section-label">{{ 'listing.filters.priceRange' | translate }}</p>
+          <div class="price-range">
+            <input type="number" class="form-control" [placeholder]="'Min'" [formControl]="$any(filterForm.get('minPrice'))" min="0" />
+            <span>—</span>
+            <input type="number" class="form-control" [placeholder]="'Max'" [formControl]="$any(filterForm.get('maxPrice'))" min="0" />
+          </div>
+        </div>
+
+        <div class="filter-section">
+          <p class="filter-section-label">{{ 'listing.filters.sortBy' | translate }}</p>
+          <select class="form-control" [formControl]="$any(filterForm.get('sortBy'))">
+            @for (opt of sortOptions; track opt.value) {
+              <option [value]="opt.value">{{ opt.label | translate }}</option>
+            }
+          </select>
+        </div>
+
+        <label class="checkbox-row">
+          <input type="checkbox" [formControl]="$any(filterForm.get('verifiedOnly'))" />
+          <span>{{ 'listing.filters.verifiedOnly' | translate }}</span>
+        </label>
+
+        @if (filterForm.get('city')?.value || filterForm.get('county')?.value || filterForm.get('category')?.value || filterForm.get('minPrice')?.value || filterForm.get('maxPrice')?.value || filterForm.get('verifiedOnly')?.value) {
+          <button type="button" class="btn-reset-filters" (click)="resetFilters()">
+            {{ 'listing.filters.reset' | translate }}
+          </button>
+        }
+      </aside>
+
+      <main class="results">
+        @if (loading) {
+          <div class="grid grid-3">
+            @for (s of skeletons; track $index) {
+              <div class="card skeleton-card">
+                <app-skeleton height="200px" radius="0" />
+                <div style="padding: 16px; display: flex; flex-direction: column; gap: 8px;">
+                  <app-skeleton height="18px" width="80%" />
+                  <app-skeleton height="14px" width="50%" />
+                  <app-skeleton height="16px" width="30%" />
+                </div>
+              </div>
+            }
+          </div>
+        } @else if (listings.length === 0) {
+          <div class="empty-state">
+            <div class="empty-icon">🔍</div>
+            <h3>{{ 'listing.noResults' | translate }}</h3>
+            <p>{{ 'listing.noResultsSubtitle' | translate }}</p>
+          </div>
+        } @else {
+          <div class="results-header">
+            <span class="text-secondary text-sm">{{ totalElements }} rezultate</span>
+          </div>
+          <div class="grid grid-3">
+            @for (listing of listings; track listing.id) {
+              <app-listing-card [listing]="listing" />
+            }
+          </div>
+          @if (totalPages > 1) {
+            <div class="pagination">
+              <button class="btn btn-secondary btn-sm" (click)="prevPage()" [disabled]="currentPage === 0">← Anterior</button>
+              <span class="text-secondary text-sm">{{ currentPage + 1 }} / {{ totalPages }}</span>
+              <button class="btn btn-secondary btn-sm" (click)="nextPage()" [disabled]="currentPage >= totalPages - 1">Următor →</button>
+            </div>
+          }
+        }
+      </main>
+    </div>
+  </div>
+</div>

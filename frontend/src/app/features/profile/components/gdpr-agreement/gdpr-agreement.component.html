@@ -1,0 +1,46 @@
+<div class="page">
+  <div class="container" style="max-width: 720px;">
+    <div class="card gdpr-card">
+      <h2>{{ 'gdpr.title' | translate }}</h2>
+      <p class="text-secondary">{{ 'gdpr.subtitle' | translate }}</p>
+
+      <div class="gdpr-content">
+        <h3>1. Datele personale colectate</h3>
+        <p>RentIt SRL prelucrează datele tale personale (nume, email, telefon, adresă IP, documente de identitate) în scopul furnizării serviciilor platformei, conform Regulamentului (UE) 2016/679 (GDPR) și Legii nr. 190/2018.</p>
+
+        <h3>2. Scopul prelucrării</h3>
+        <p>Datele tale sunt folosite pentru: autentificare și gestionarea contului, verificarea identității (KYC), procesarea plăților, comunicare tranzacțională și îmbunătățirea serviciilor.</p>
+
+        <h3>3. Stocarea datelor KYC</h3>
+        <p>Documentele de identitate (selfie, CI față/spate) sunt stocate securizat și sunt accesibile exclusiv personalului autorizat pentru verificare. Nu sunt partajate cu terți fără consimțământul tău.</p>
+
+        <h3>4. Drepturile tale (Art. 15–22 GDPR)</h3>
+        <p>Ai dreptul la acces, rectificare, ștergere, restricționare, portabilitate și opoziție față de prelucrarea datelor tale. Poți solicita ștergerea contului din profilul tău.</p>
+
+        <h3>5. Date financiare</h3>
+        <p>Plățile sunt procesate de Stripe Inc. RentIt nu stochează datele cardului tău. Sumele tranzacționate sunt reținute conform politicii de garanție.</p>
+
+        <h3>6. Contact DPO</h3>
+        <p>Pentru orice solicitare privind datele personale: <strong>support&#64;rentit.ro</strong></p>
+
+        <p style="margin-top: 16px; font-size: 13px; color: var(--color-text-tertiary);">
+          Temei legal: Art. 6(1)(a) GDPR — consimțământul explicit al persoanei vizate.
+        </p>
+      </div>
+
+      <label class="agree-check">
+        <input type="checkbox" [(ngModel)]="agreed" />
+        <span>{{ 'gdpr.agree' | translate }}</span>
+      </label>
+
+      <button
+        class="btn btn-primary"
+        style="width: 100%;"
+        (click)="sign()"
+        [disabled]="!agreed || loading"
+      >
+        @if (loading) { <span class="spinner"></span> } @else { {{ 'gdpr.sign' | translate }} }
+      </button>
+    </div>
+  </div>
+</div>

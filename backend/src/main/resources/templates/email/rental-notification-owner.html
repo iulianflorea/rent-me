@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"></head>
+<body style="margin:0;padding:0;background-color:#f5f5f7;font-family:-apple-system,BlinkMacSystemFont,'Inter',sans-serif;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f5f5f7;padding:40px 20px;">
+  <tr>
+    <td align="center">
+      <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;">
+        <tr>
+          <td style="background-color:#4f46e5;padding:32px 40px;border-radius:16px 16px 0 0;text-align:center;">
+            <h1 style="margin:0;color:#ffffff;font-size:28px;font-weight:700;">RentIt</h1>
+            <p style="margin:12px 0 0;color:#ffffff;font-size:20px;font-weight:600;">🎉 Ai primit o rezervare nouă!</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="background-color:#ffffff;padding:40px;border-radius:0 0 16px 16px;">
+            <p style="margin:0 0 24px;color:#6e6e73;font-size:16px;">Bună, <span th:text="${rental.owner.firstName}">Proprietar</span>!</p>
+            <p style="margin:0 0 24px;color:#1d1d1f;font-size:16px;line-height:1.6;">Cineva vrea să închirieze <strong th:text="${listing.title}">produsul</strong> tău.</p>
+
+            <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f5f5f7;border-radius:12px;padding:24px;margin:0 0 32px;">
+              <tr>
+                <td>
+                  <p style="margin:0 0 8px;color:#6e6e73;font-size:14px;font-weight:500;text-transform:uppercase;">DETALII REZERVARE</p>
+                  <p style="margin:0 0 4px;color:#1d1d1f;font-size:15px;">Chiriaș: <strong th:text="${rental.tenant.firstName + ' ' + rental.tenant.lastName}">Chiriaș</strong></p>
+                  <p style="margin:0 0 4px;color:#1d1d1f;font-size:15px;">Perioadă: <span th:text="${rental.startDate + ' → ' + rental.endDate}">date</span></p>
+                  <p style="margin:0 0 4px;color:#1d1d1f;font-size:15px;">Zile: <span th:text="${rental.totalDays}">X</span></p>
+                  <p style="margin:0 0 4px;color:#1d1d1f;font-size:15px;">Suma (net): <strong style="color:#34c759;" th:text="${payment.ownerNetAmount + ' RON'}">X RON</strong></p>
+                  <p style="margin:0 0 4px;color:#6e6e73;font-size:13px;">Comision aplicație (5%): <span th:text="${payment.platformFee + ' RON'}">X RON</span></p>
+                  <p style="margin:0;color:#1d1d1f;font-size:13px;">ID rezervare: <strong th:text="${rental.referenceNumber}">#RNT-XXX</strong></p>
+                </td>
+              </tr>
+            </table>
+
+            <p style="margin:0 0 24px;padding:16px 20px;background-color:#fff9db;border-radius:8px;color:#7d5a00;font-size:14px;line-height:1.6;">
+              💰 Suma este în așteptare până la confirmarea ridicării de către chiriaș.
+            </p>
+
+            <h3 style="margin:0 0 16px;color:#1d1d1f;font-size:18px;">Ce trebuie să faci?</h3>
+            <ol style="margin:0 0 32px;padding-left:24px;color:#1d1d1f;font-size:15px;line-height:2;">
+              <li>Pregătește produsul până la data de <span th:text="${rental.startDate}">data</span></li>
+              <li>Marchează comanda ca „Gata de ridicare" în aplicație</li>
+              <li>La ridicare, afișează codul QR pentru scanare la returnare</li>
+            </ol>
+
+            <hr style="border:none;border-top:1px solid #e8e8ed;margin:32px 0;">
+            <p style="margin:0;color:#6e6e73;font-size:12px;text-align:center;">Ai nevoie de ajutor? <a href="mailto:support@rentit.ro" style="color:#4f46e5;">support@rentit.ro</a></p>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+</body>
+</html>

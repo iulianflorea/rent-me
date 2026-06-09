@@ -1,0 +1,213 @@
+.create-card {
+  padding: 32px;
+  margin-top: 32px;
+  h2 { font-size: 24px; margin-bottom: 32px; }
+}
+
+.form-section {
+  margin-bottom: 32px;
+  padding-bottom: 32px;
+  border-bottom: 1px solid var(--color-border);
+
+  &:last-of-type { border-bottom: none; }
+
+  h3 { font-size: 18px; margin-bottom: 20px; color: var(--color-text-primary); }
+}
+
+.row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; @media (max-width: 640px) { grid-template-columns: 1fr; } }
+
+textarea.form-control { resize: vertical; min-height: 120px; }
+
+.images-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 10px;
+}
+
+.image-preview {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+
+  img { width: 100%; height: 100%; object-fit: cover; }
+}
+
+.remove-btn {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.6);
+  color: #fff;
+  border: none;
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.add-image-btn {
+  aspect-ratio: 1;
+  border: 2px dashed var(--color-border);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--color-text-tertiary);
+  transition: border-color 200ms, color 200ms;
+
+  &:hover { border-color: var(--color-accent); color: var(--color-accent); }
+}
+
+.fee-preview {
+  margin-top: 16px;
+  margin-bottom: 24px;
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md, 12px);
+  padding: 16px 20px;
+
+  .fee-preview-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 12px;
+  }
+
+  .fee-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 0;
+    font-size: 14px;
+    color: var(--color-text-primary);
+
+    + .fee-row { border-top: 1px solid var(--color-border); }
+
+    .fee-label { color: var(--color-text-secondary); }
+    .fee-value { font-variant-numeric: tabular-nums; }
+  }
+
+  .fee-deduction {
+    .fee-value { color: var(--color-danger); }
+  }
+
+  .fee-total {
+    margin-top: 4px;
+    padding-top: 10px;
+    border-top: 2px solid var(--color-border) !important;
+    font-weight: 600;
+
+    .fee-label { color: var(--color-text-primary); }
+    .fee-value { color: var(--color-success); font-size: 15px; }
+  }
+}
+
+.form-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.optional {
+  font-size: 12px;
+  color: var(--color-text-tertiary);
+  font-weight: 400;
+}
+
+.field-hint {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  margin-top: 4px;
+  margin-bottom: 0;
+}
+
+.tag-input-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 10px;
+  border: 1px solid var(--color-input-border);
+  border-radius: var(--radius-sm, 8px);
+  background: var(--color-input-bg);
+  min-height: 42px;
+  cursor: text;
+
+  &:focus-within {
+    border-color: var(--color-accent);
+    outline: none;
+  }
+}
+
+.tag-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px 2px 10px;
+  background: var(--color-accent);
+  color: #fff;
+  border-radius: 20px;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.tag-remove {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 2px;
+  display: flex;
+  align-items: center;
+
+  &:hover { color: #fff; }
+}
+
+.tag-input {
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 14px;
+  color: var(--color-text-primary);
+  min-width: 120px;
+  flex: 1;
+}
+
+.checkbox-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 10px 16px;
+  padding: 12px 0 4px;
+}
+
+.checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--color-text-primary);
+  cursor: pointer;
+
+  input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--color-accent);
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+}

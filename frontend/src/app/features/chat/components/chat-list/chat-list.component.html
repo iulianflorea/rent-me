@@ -1,0 +1,38 @@
+<div class="page">
+  <div class="container" style="max-width: 640px;">
+    <h2 style="margin-bottom: 24px;">{{ 'chat.title' | translate }}</h2>
+
+    @if (loading) {
+      <div style="text-align: center; padding: 48px;"><div class="spinner" style="margin: auto;"></div></div>
+    } @else if (rooms.length === 0) {
+      <div class="empty-state">
+        <div class="empty-icon">💬</div>
+        <h3>{{ 'chat.noConversations' | translate }}</h3>
+        <p>{{ 'chat.noConversationsSubtitle' | translate }}</p>
+      </div>
+    } @else {
+      @for (room of rooms; track room.id) {
+        <a [routerLink]="['/chat', room.id]" class="card room-item">
+          <div class="room-avatar">{{ room.otherUser.firstName.charAt(0) }}{{ room.otherUser.lastName.charAt(0) }}</div>
+          <div class="room-info">
+            <div class="room-header">
+              <strong>{{ room.otherUser.firstName }} {{ room.otherUser.lastName }}</strong>
+              @if (room.lastMessageAt) {
+                <span class="text-xs text-secondary">{{ room.lastMessageAt | timeAgo }}</span>
+              }
+            </div>
+            @if (room.rental) {
+              <p class="room-context text-xs text-secondary">{{ room.rental.listing.title }}</p>
+            }
+            @if (room.lastMessage) {
+              <p class="room-last text-sm text-secondary">{{ room.lastMessage }}</p>
+            }
+          </div>
+          @if (room.unreadCount > 0) {
+            <span class="unread-badge">{{ room.unreadCount }}</span>
+          }
+        </a>
+      }
+    }
+  </div>
+</div>

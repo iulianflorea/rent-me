@@ -1,0 +1,521 @@
+<div class="page">
+  <div class="container" style="max-width: 760px;">
+    <div class="card create-card">
+      <h2>{{ 'listing.create.title' | translate }}</h2>
+
+      <form [formGroup]="form" (ngSubmit)="submit()">
+
+        <!-- ── SECTION 1: Informații generale ── -->
+        <section class="form-section">
+          <h3>{{ 'listing.create.step1' | translate }}</h3>
+
+          <div class="form-group">
+            <label class="form-label">{{ 'listing.create.titleField' | translate }}</label>
+            <input type="text" formControlName="title" class="form-control" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">{{ 'listing.create.category' | translate }}</label>
+            <select formControlName="category" class="form-control">
+              @for (cat of categories; track cat) {
+                <option [value]="cat">{{ 'listing.categories.' + cat | translate }}</option>
+              }
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">{{ 'listing.create.description' | translate }}</label>
+            <textarea formControlName="description" class="form-control" rows="5"></textarea>
+          </div>
+        </section>
+
+        <!-- ── SECTION 2: Locație ── -->
+        <section class="form-section">
+          <h3>{{ 'listing.create.step2' | translate }}</h3>
+          <div class="row-2">
+            <div class="form-group">
+              <label class="form-label">{{ 'listing.create.city' | translate }}</label>
+              <input type="text" formControlName="city" class="form-control" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">{{ 'listing.create.county' | translate }}</label>
+              <input type="text" formControlName="county" class="form-control" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">{{ 'listing.create.address' | translate }} <span class="optional">({{ 'common.optional' | translate }})</span></label>
+            <input type="text" formControlName="address" class="form-control" />
+          </div>
+        </section>
+
+        <!-- ── SECTION 3: Specificații per categorie ── -->
+        <section class="form-section">
+          <h3>{{ 'listing.create.step3' | translate }}</h3>
+
+          <div [formGroup]="attrsGroup">
+
+            <!-- TOOLS -->
+            @if (currentCategory === 'TOOLS') {
+              <div class="row-2">
+                <div class="form-group">
+                  <label class="form-label">{{ 'listing.fields.brand' | translate }}</label>
+                  <input type="text" formControlName="brand" class="form-control" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label">{{ 'listing.fields.model' | translate }}</label>
+                  <input type="text" formControlName="model" class="form-control" />
+                </div>
+              </div>
+
+              <div class="row-3">
+                <div class="form-group">
+                  <label class="form-label">{{ 'listing.fields.tipScula' | translate }}</label>
+                  <select formControlName="tipScula" class="form-control">
+                    <option value="">—</option>
+                    @for (t of tipSculaOptions; track t) {
+                      <option [value]="t">{{ t }}</option>
+                    }
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">{{ 'listing.fields.stare' | translate }}</label>
+                  <select formControlName="stare" class="form-control">
+                    @for (s of stareOptions; track s) {
+                      <option [value]="s">{{ s }}</option>
+                    }
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">{{ 'listing.fields.putere' | translate }}</label>
+                  <input type="number" formControlName="putere" class="form-control" min="0" />
+                </div>
+              </div>
+
+              <div class="row-2">
+                <div class="form-group">
+                  <label class="form-label">{{ 'listing.fields.alimentare' | translate }}</label>
+                  <select formControlName="alimentare" class="form-control">
+                    @for (a of alimentareOptions; track a) {
+                      <option [value]="a">{{ a }}</option>
+                    }
+                  </select>
+                </div>
+                @if (attrsGroup.get('alimentare')?.value === 'Baterie') {
+                  <div class="form-group">
+                    <label class="form-label">{{ 'listing.fields.tensiuneBaterie' | translate }}</label>
+                    <select formControlName="tensiuneBaterie" class="form-control">
+                      <option value="">—</option>
+                      @for (t of tensiuneOptions; track t) {
+                        <option [value]="t">{{ t }}</option>
+                      }
+                    </select>
+                  </div>
+                }
+              </div>
+
+              @if (attrsGroup.get('alimentare')?.value === 'Baterie') {
+                <div class="form-group" style="max-width: 200px;">
+                  <label class="form-label">{{ 'listing.fields.capacitateBaterie' | translate }} <span class="optional">({{ 'common.optional' | translate }})</span></label>
+                  <input type="number" formControlName="capacitateBaterie" class="form-control" min="0" />
+                </div>
+              }
+
+              <div class="form-group">
+                <label class="form-label">{{ 'listing.fields.functiiPrincipale' | translate }}</label>
+                <div class="tag-input-wrapper">
+                  @for (tag of toolTags; track tag) {
+                    <span class="tag-chip">
+                      {{ tag }}
+                      <button type="button" class="tag-remove" (click)="removeToolTag($index)">×</button>
+                    </span>
+                  }
+                  <input type="text" class="tag-input"
+                    [placeholder]="'listing.fields.tagPlaceholder' | translate"
+                    (keydown)="onToolTagKeydown($event, tagInput)"
+                    #tagInput />
+                </div>
+                <p class="field-hint">{{ 'listing.fields.tagHint' | translate }}</p>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">{{ 'listing.fields.includeAcesorii' | translate }} <span class="optional">({{ 'common.optional' | translate }})</span></label>
+                <textarea formControlName="includeAcesorii" class="form-control" rows="2"></textarea>
+              </div>
+            }
+
+            <!-- VEHICLES -->
+            @if (currentCategory === 'VEHICLES') {
+              <div class="row-3">
+                <div class="form-group">
+                  <label class="form-label">{{ 'listing.fields.marca' | translate }} *</label>
+                  <input type="text" formControlName="marca" class="form-control" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label">{{ 'listing.fields.model' | translate }} *</label>
+                  <input type="text" formControlName="model" class="form-control" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label">{{ 'listing.fields.anFabricatie' | translate }} *</label>
+                  <input type="number" formControlName="anFabricatie" class="form-control" min="1900" [max]="2025" />
+                </div>
+              </div>
+
+              <div class="row-2">
+                <div class="form-group">
+                  <label class="form-label">{{ 'listing.fields.caroserie' | translate }}</label>
+                  <select formControlName="caroserie" class="form-control">
+                    <option value="">—</option>
+                    @for (c of caroserieOptions; track c) {
+                      <option [value]="c">{{ c }}</option>
+                    }
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">{{ 'listing.fields.combustibil' | translate }}</label>
+                  <select formControlName="combustibil" class="form-control">
+                    @for (c of combustibilOptions; track c) {
+                      <option [value]="c">{{ c }}</option>
+                    }
+                  </select>
+                </div>
+              </div>
+
+              <div class="row-3">
+                <div class="form-group">
+                  <label class="form-label">{{ 'listing.fields.cilindree' | translate }}</label>
+                  <input type="number" formControlName="cilindree" class="form-control" min="0" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label">{{ 'listing.fields.putereMotor' | translate }}</label>
+                  <input type="number" formControlName="putereMotor" class="form-control" min="0" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label">{{ 'listing.fields.rulaj' | translate }}</label>
+                  <input type="number" formControlName="rulaj" class="form-control" min="0" />
+                </div>
+              </div>
+
+              <div class="row-3">
+                <div class="form-group">
+                  <label class="form-label">{{ 'listing.fields.transmisie' | translate }}</label>
+                  <select formControlName="transmisie" class="form-control">
+                    @for (t of transmisieOptions; track t) {
+                      <option [value]="t">{{ t }}</option>
+                    }
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">{{ 'listing.fields.tractiune' | translate }}</label>
+                  <select formControlName="tractiune" class="form-control">
+                    @for (t of tractiuneOptions; track t) {
+                      <option [value]="t">{{ t }}</option>
+                    }
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">{{ 'listing.fields.nrLocuri' | translate }}</label>
+                  <input type="number" formControlName="nrLocuri" class="form-control" min="1" max="50" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">{{ 'listing.fields.capacitatePortbagaj' | translate }} <span class="optional">({{ 'common.optional' | translate }})</span></label>
+                <input type="number" formControlName="capacitatePortbagaj" class="form-control" min="0" style="max-width: 200px;" />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">{{ 'listing.fields.dotari' | translate }}</label>
+                <div class="checkbox-grid" formGroupName="dotari">
+                  @for (d of dotariOptions; track d) {
+                    <label class="checkbox-item">
+                      <input type="checkbox" [formControlName]="d" />
+                      <span>{{ d }}</span>
+                    </label>
+                  }
+                </div>
+              </div>
+
+              <div class="row-2">
+                <div class="form-group">
+                  <label class="form-label">{{ 'listing.fields.permisNecesar' | translate }}</label>
+                  <select formControlName="permisNecesar" class="form-control">
+                    @for (p of permisOptions; track p) {
+                      <option [value]="p">{{ p }}</option>
+                    }
+                  </select>
+                </div>
+                <div class="form-group" style="display: flex; align-items: flex-end; padding-bottom: 2px;">
+                  <label class="checkbox-item" style="cursor: pointer;">
+                    <input type="checkbox" formControlName="asigurareInclusa" />
+                    <span>{{ 'listing.fields.asigurareInclusa' | translate }}</span>
+                  </label>
+                </div>
+              </div>
+
+              @if (attrsGroup.get('asigurareInclusa')?.value) {
+                <div class="form-group" style="max-width: 220px;">
+                  <label class="form-label">{{ 'listing.fields.franciza' | translate }}</label>
+                  <input type="number" formControlName="franciza" class="form-control" min="0" />
+                </div>
+              }
+            }
+
+            <!-- REAL_ESTATE -->
+            @if (currentCategory === 'REAL_ESTATE') {
+              <div class="row-2">
+                <div class="form-group">
+                  <label class="form-label">{{ 'listing.fields.tipProprietate' | translate }}</label>
+                  <select formControlName="tipProprietate" class="form-control">
+                    @for (t of tipProprietateOptions; track t) {
+                      <option [value]="t">{{ t }}</option>
+                    }
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">{{ 'listing.fields.regim' | translate }}</label>
+                  <select formControlName="regim" class="form-control">
+                    @for (r of regimOptions; track r) {
+                      <option [value]="r">{{ r }}</option>
+                    }
+                  </select>
+                </div>
+              </div>
+
+              <div class="row-3">
+                <div class="form-group">
+                  <label class="form-label">{{ 'listing.fields.suprafataUtila' | translate }} *</label>
+                  <input type="number" formControlName="suprafataUtila" class="form-control" min="1" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label">{{ 'listing.fields.suprafataTotal' | translate }} <span class="optional">({{ 'common.optional' | translate }})</span></label>
+                  <input type="number" formControlName="suprafataTotal" class="form-control" min="1" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label">{{ 'listing.fields.nrMaxOaspeti' | translate }}</label>
+                  <input type="number" formControlName="nrMaxOaspeti" class="form-control" min="1" />
+                </div>
+              </div>
+
+              <div class="row-3">
+                <div class="form-group">
+                  <label class="form-label">{{ 'listing.fields.nrCamere' | translate }}</label>
+                  <input type="number" formControlName="nrCamere" class="form-control" min="0" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label">{{ 'listing.fields.nrBai' | translate }}</label>
+                  <input type="number" formControlName="nrBai" class="form-control" min="0" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label">{{ 'listing.fields.etaj' | translate }}</label>
+                  <input type="number" formControlName="etaj" class="form-control" />
+                </div>
+              </div>
+
+              <div class="row-2">
+                <div class="form-group">
+                  <label class="form-label">Check-in</label>
+                  <input type="time" formControlName="checkIn" class="form-control" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Check-out</label>
+                  <input type="time" formControlName="checkOut" class="form-control" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">{{ 'listing.fields.facilitati' | translate }}</label>
+                <div class="checkbox-grid" formGroupName="facilitati">
+                  @for (f of facilitatiOptions; track f) {
+                    <label class="checkbox-item">
+                      <input type="checkbox" [formControlName]="f" />
+                      <span>{{ f }}</span>
+                    </label>
+                  }
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">{{ 'listing.fields.reguliCasa' | translate }} <span class="optional">({{ 'common.optional' | translate }})</span></label>
+                <textarea formControlName="reguliCasa" class="form-control" rows="3"></textarea>
+              </div>
+            }
+
+            <!-- ELECTRONICS -->
+            @if (currentCategory === 'ELECTRONICS') {
+              <div class="form-group">
+                <label class="form-label">{{ 'listing.fields.tipDevice' | translate }}</label>
+                <select formControlName="tipDevice" class="form-control">
+                  @for (t of tipElectronicsOptions; track t) {
+                    <option [value]="t">{{ t }}</option>
+                  }
+                </select>
+              </div>
+
+              <div class="row-2">
+                <div class="form-group">
+                  <label class="form-label">{{ 'listing.fields.brand' | translate }}</label>
+                  <input type="text" formControlName="brand" class="form-control" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label">{{ 'listing.fields.model' | translate }}</label>
+                  <input type="text" formControlName="model" class="form-control" />
+                </div>
+              </div>
+
+              <div class="form-group" style="max-width: 260px;">
+                <label class="form-label">{{ 'listing.fields.stare' | translate }}</label>
+                <select formControlName="stare" class="form-control">
+                  @for (s of stareOptions; track s) {
+                    <option [value]="s">{{ s }}</option>
+                  }
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">{{ 'listing.fields.specificatii' | translate }}</label>
+                <textarea formControlName="specificatii" class="form-control" rows="4" [placeholder]="'listing.fields.specificatiiPlaceholder' | translate"></textarea>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">{{ 'listing.fields.accesoriiIncluse' | translate }} <span class="optional">({{ 'common.optional' | translate }})</span></label>
+                <textarea formControlName="accesoriiIncluse" class="form-control" rows="2"></textarea>
+              </div>
+            }
+
+            <!-- SPORTS -->
+            @if (currentCategory === 'SPORTS') {
+              <div class="form-group">
+                <label class="form-label">{{ 'listing.fields.tipSport' | translate }} *</label>
+                <input type="text" formControlName="tipSport" class="form-control" />
+              </div>
+
+              <div class="row-2">
+                <div class="form-group">
+                  <label class="form-label">{{ 'listing.fields.stare' | translate }}</label>
+                  <select formControlName="stare" class="form-control">
+                    @for (s of stareOptions; track s) {
+                      <option [value]="s">{{ s }}</option>
+                    }
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">{{ 'listing.fields.dimensiune' | translate }} <span class="optional">({{ 'common.optional' | translate }})</span></label>
+                  <input type="text" formControlName="dimensiune" class="form-control" />
+                </div>
+              </div>
+
+              <label class="checkbox-item" style="margin-top: 4px; cursor: pointer;">
+                <input type="checkbox" formControlName="includeProtectie" />
+                <span>{{ 'listing.fields.includeProtectie' | translate }}</span>
+              </label>
+            }
+
+            <!-- OTHER -->
+            @if (currentCategory === 'OTHER') {
+              <div class="row-2">
+                <div class="form-group">
+                  <label class="form-label">{{ 'listing.fields.tipObiect' | translate }}</label>
+                  <input type="text" formControlName="tipObiect" class="form-control" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label">{{ 'listing.fields.stare' | translate }}</label>
+                  <select formControlName="stare" class="form-control">
+                    @for (s of stareOptions; track s) {
+                      <option [value]="s">{{ s }}</option>
+                    }
+                  </select>
+                </div>
+              </div>
+
+              <div class="row-2">
+                <div class="form-group">
+                  <label class="form-label">{{ 'listing.fields.dimensiuni' | translate }} <span class="optional">({{ 'common.optional' | translate }})</span></label>
+                  <input type="text" formControlName="dimensiuni" class="form-control" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label">{{ 'listing.fields.greutate' | translate }} <span class="optional">({{ 'common.optional' | translate }})</span></label>
+                  <input type="text" formControlName="greutate" class="form-control" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">{{ 'listing.fields.note' | translate }} <span class="optional">({{ 'common.optional' | translate }})</span></label>
+                <textarea formControlName="note" class="form-control" rows="3"></textarea>
+              </div>
+            }
+
+          </div>
+        </section>
+
+        <!-- ── SECTION 4: Poze și preț ── -->
+        <section class="form-section">
+          <h3>{{ 'listing.create.step4' | translate }}</h3>
+
+          <div class="row-3">
+            <div class="form-group">
+              <label class="form-label">{{ 'listing.create.pricePerDay' | translate }} *</label>
+              <input type="number" formControlName="pricePerDay" class="form-control" min="1" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">{{ 'listing.create.pricePerWeek' | translate }} <span class="optional">({{ 'common.optional' | translate }})</span></label>
+              <input type="number" formControlName="pricePerWeek" class="form-control" min="1" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">{{ 'listing.create.pricePerMonth' | translate }} <span class="optional">({{ 'common.optional' | translate }})</span></label>
+              <input type="number" formControlName="pricePerMonth" class="form-control" min="1" />
+            </div>
+          </div>
+
+          @if (paymentPreview) {
+            <div class="fee-preview">
+              <div class="fee-preview-header">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12" y2="16"/></svg>
+                {{ 'listing.create.earningsPreview' | translate }}
+              </div>
+              <div class="fee-row">
+                <span class="fee-label">{{ 'listing.create.feeChiriasPays' | translate }}</span>
+                <span class="fee-value">{{ paymentPreview.pricePerDay | number:'1.0-2' }} RON</span>
+              </div>
+              <div class="fee-row fee-deduction">
+                <span class="fee-label">{{ 'listing.create.feePlatform' | translate }} (5%)</span>
+                <span class="fee-value">− {{ paymentPreview.platformFee | number:'1.0-2' }} RON</span>
+              </div>
+              <div class="fee-row fee-total">
+                <span class="fee-label">{{ 'listing.create.feeYouReceive' | translate }}</span>
+                <span class="fee-value">{{ paymentPreview.ownerReceives | number:'1.0-2' }} RON</span>
+              </div>
+            </div>
+          }
+
+          <div class="form-group" style="margin-top: 24px;">
+            <label class="form-label">{{ 'listing.create.images' | translate }}</label>
+            <p class="field-hint">{{ 'listing.create.imagesHint' | translate }}</p>
+
+            <div class="images-grid">
+              @for (preview of previews; track $index) {
+                <div class="image-preview">
+                  <img [src]="preview" alt="Preview" />
+                  <button type="button" class="remove-btn" (click)="removeImage($index)">×</button>
+                </div>
+              }
+              @if (previews.length < 10) {
+                <label class="add-image-btn">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+                  <input type="file" accept="image/*" multiple style="display:none;" (change)="onFilesChange($event)" />
+                </label>
+              }
+            </div>
+          </div>
+        </section>
+
+        <div class="form-actions">
+          <a routerLink="/dashboard/listings" class="btn btn-secondary">{{ 'common.cancel' | translate }}</a>
+          <button type="submit" class="btn btn-primary" [disabled]="form.invalid || loading || previews.length === 0">
+            @if (loading) { <span class="spinner"></span> } @else { {{ 'listing.create.publish' | translate }} }
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>

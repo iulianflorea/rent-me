@@ -1,0 +1,43 @@
+<div class="page">
+  <div class="container">
+    <h2 style="margin-bottom: 24px;">{{ 'rental.myEarnings.title' | translate }}</h2>
+
+    @if (loading) {
+      @for (s of [1,2,3]; track s) {
+        <div class="card rental-row"><app-skeleton height="60px" /></div>
+      }
+    } @else if (rentals.length === 0) {
+      <div class="empty-state">
+        <div class="empty-icon">💰</div>
+        <h3>{{ 'rental.myEarnings.empty' | translate }}</h3>
+        <p>{{ 'rental.myEarnings.emptySubtitle' | translate }}</p>
+        <a routerLink="/listings/create" class="btn btn-primary" style="margin-top: 16px;">+ Postează anunț</a>
+      </div>
+    } @else {
+      @for (rental of rentals; track rental.id) {
+        <div class="card rental-row">
+          <img [src]="rental.listing.firstImageUrl || 'assets/placeholder.png'" [alt]="rental.listing.title" class="rental-thumb" />
+          <div class="rental-info">
+            <h3>{{ rental.listing.title }}</h3>
+            <p class="text-secondary text-sm">Chiriaș: {{ rental.tenant.firstName }} {{ rental.tenant.lastName }}</p>
+            <p class="text-secondary text-sm">{{ rental.startDate }} → {{ rental.endDate }}</p>
+          </div>
+          <div class="rental-meta">
+            <span class="badge" [class]="statusBadgeClass(rental.status)">
+              {{ 'rental.status.' + rental.status | translate }}
+            </span>
+            <strong class="text-accent" style="font-size: 16px;">{{ rental.subtotal | number:'1.0-0' }} RON</strong>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            @if (rental.status === 'PAID') {
+              <button class="btn btn-primary btn-sm" (click)="markReady(rental)">
+                {{ 'rental.myEarnings.markReady' | translate }}
+              </button>
+            }
+            <a [routerLink]="['/rentals', rental.id]" class="btn btn-secondary btn-sm">{{ 'common.view' | translate }}</a>
+          </div>
+        </div>
+      }
+    }
+  </div>
+</div>
